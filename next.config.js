@@ -1,12 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  eslint: {
-    ignoreDuringBuilds: true,
+  images: {
+    domains: ["images.unsplash.com", "images.pexels.com", "localhost"],
   },
-  images: { unoptimized: true },
-  // Disable automatic font optimization since we're doing static export
-  optimizeFonts: false,
+  // Configuration pour servir les fichiers admin
+  async rewrites() {
+    return [
+      {
+        source: "/admin/:path*",
+        destination: "/admin/:path*",
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

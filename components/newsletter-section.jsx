@@ -10,19 +10,19 @@ export default function NewsletterSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!email) return;
-    
+
     setIsLoading(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
       setIsSubmitted(true);
       setEmail("");
-      
+
       // Reset success state after 5 seconds
       setTimeout(() => {
         setIsSubmitted(false);
@@ -38,11 +38,14 @@ export default function NewsletterSection() {
             Abonnez-vous à notre newsletter
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Recevez nos derniers articles et conseils directement dans votre boîte mail. 
-            Nous vous promettons de ne pas vous spammer !
+            Recevez nos derniers articles et conseils directement dans votre
+            boîte mail. Nous vous promettons de ne pas vous spammer !
           </p>
-          
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+          >
             <Input
               type="email"
               placeholder="Votre adresse email"
@@ -52,8 +55,8 @@ export default function NewsletterSection() {
               className="flex-grow"
               disabled={isSubmitted || isLoading}
             />
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isSubmitted || isLoading}
               className="whitespace-nowrap"
             >
@@ -70,15 +73,18 @@ export default function NewsletterSection() {
               ) : (
                 <span className="flex items-center">
                   <Send className="h-4 w-4 mr-2" />
-                  S'abonner
+                  S&apos;abonner
                 </span>
               )}
             </Button>
           </form>
-          
+
           <p className="text-sm text-gray-500 dark:text-gray-500 mt-4">
-            En vous inscrivant, vous acceptez notre {" "}
-            <a href="/politique-de-confidentialite" className="underline hover:text-primary">
+            En vous inscrivant, vous acceptez notre{" "}
+            <a
+              href="/politique-de-confidentialite"
+              className="underline hover:text-primary"
+            >
               politique de confidentialité
             </a>
           </p>

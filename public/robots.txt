@@ -1,0 +1,25 @@
+# Robots.txt pour Les Pros de Cherbourg
+
+User-agent: *
+Allow: /
+
+# Bloquer l'admin CMS
+Disallow: /admin/
+Disallow: /admin
+
+# Bloquer les fichiers système
+Disallow: /_next/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://lesprosdecherbourg.fr/sitemap.xml
+
+# Optimisations pour les moteurs de recherche
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl-delay (optionnel)
+Crawl-delay: 1

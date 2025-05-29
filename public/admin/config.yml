@@ -1,0 +1,125 @@
+backend:
+  name: github
+  repo: ThibautGallien/Lesprosdecherbourg # ⚠️ À remplacer par ton username GitHub
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+# Configuration locale
+locale: 'fr'
+
+# Configuration des médias
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+# Collections
+collections:
+  # Articles
+  - name: "articles"
+    label: "Articles"
+    folder: "content/articles"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Titre", name: "title", widget: "string"}
+      - {label: "Slug (mots-clés pour l'URL)", name: "slug", widget: "string", pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*
+
+  # Pages
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "À propos"
+        name: "about"
+        file: "content/pages/about.md"
+        fields:
+          - {label: "Titre", name: "title", widget: "string"}
+          - {label: "Contenu", name: "body", widget: "markdown"}
+      
+      - label: "Contact"
+        name: "contact"
+        file: "content/pages/contact.md"
+        fields:
+          - {label: "Titre", name: "title", widget: "string"}
+          - {label: "Email", name: "email", widget: "string"}
+          - {label: "Téléphone", name: "phone", widget: "string", required: false}
+          - {label: "Adresse", name: "address", widget: "text", required: false}
+          - {label: "Contenu", name: "body", widget: "markdown"}
+
+  # Configuration du site
+  - name: "settings"
+    label: "Configuration"
+    files:
+      - label: "Configuration générale"
+        name: "general"
+        file: "content/settings/general.yml"
+        fields:
+          - {label: "Nom du site", name: "site_name", widget: "string"}
+          - {label: "Description", name: "site_description", widget: "text"}
+          - {label: "URL du site", name: "site_url", widget: "string"}
+          - {label: "Logo", name: "logo", widget: "image", required: false}
+          - {label: "Favicon", name: "favicon", widget: "image", required: false}
+          
+      - label: "Newsletter"
+        name: "newsletter"
+        file: "content/settings/newsletter.yml"
+        fields:
+          - {label: "Titre", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Placeholder email", name: "email_placeholder", widget: "string"}
+          - {label: "Texte du bouton", name: "button_text", widget: "string"}, 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets'], hint: "Ex: les-vertues-de-la-spiruline (sera dans l'URL finale)"}
+      - {label: "Description courte", name: "excerpt", widget: "text"}
+      - {label: "Image principale", name: "image", widget: "image"}
+      - {label: "Catégorie", name: "category", widget: "select", options: ["technologie", "mode-et-beaute", "voyage", "loisirs", "sante-et-bien-etre"]}
+      - {label: "Auteur", name: "author", widget: "object", fields: [
+          {label: "Nom", name: "name", widget: "string"},
+          {label: "Avatar", name: "avatar", widget: "image"}
+        ]}
+      - {label: "Date de publication", name: "publishedAt", widget: "datetime"}
+      - {label: "Brouillon", name: "draft", widget: "boolean", default: false}
+      - {label: "Contenu", name: "body", widget: "markdown"}
+      - {label: "Tags", name: "tags", widget: "list", allow_add: true, allow_delete: true}
+      - {label: "Temps de lecture", name: "readingTime", widget: "number", min: 1, max: 30, default: 5}
+
+  # Pages
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "À propos"
+        name: "about"
+        file: "content/pages/about.md"
+        fields:
+          - {label: "Titre", name: "title", widget: "string"}
+          - {label: "Contenu", name: "body", widget: "markdown"}
+      
+      - label: "Contact"
+        name: "contact"
+        file: "content/pages/contact.md"
+        fields:
+          - {label: "Titre", name: "title", widget: "string"}
+          - {label: "Email", name: "email", widget: "string"}
+          - {label: "Téléphone", name: "phone", widget: "string", required: false}
+          - {label: "Adresse", name: "address", widget: "text", required: false}
+          - {label: "Contenu", name: "body", widget: "markdown"}
+
+  # Configuration du site
+  - name: "settings"
+    label: "Configuration"
+    files:
+      - label: "Configuration générale"
+        name: "general"
+        file: "content/settings/general.yml"
+        fields:
+          - {label: "Nom du site", name: "site_name", widget: "string"}
+          - {label: "Description", name: "site_description", widget: "text"}
+          - {label: "URL du site", name: "site_url", widget: "string"}
+          - {label: "Logo", name: "logo", widget: "image", required: false}
+          - {label: "Favicon", name: "favicon", widget: "image", required: false}
+          
+      - label: "Newsletter"
+        name: "newsletter"
+        file: "content/settings/newsletter.yml"
+        fields:
+          - {label: "Titre", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Placeholder email", name: "email_placeholder", widget: "string"}
+          - {label: "Texte du bouton", name: "button_text", widget: "string"}

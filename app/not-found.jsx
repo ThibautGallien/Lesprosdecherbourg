@@ -8,18 +8,15 @@ export default function NotFound() {
         <h1 className="text-6xl font-serif font-bold text-primary mb-4">404</h1>
         <h2 className="text-2xl font-bold mb-4">Page introuvable</h2>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          Désolé, la page que vous recherchez n'existe pas ou a été déplacée.
+          Désolé, la page que vous recherchez n&apos;existe pas ou a été
+          déplacée.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild>
-            <Link href="/">
-              Retour à l'accueil
-            </Link>
+            <Link href="/">Retour à l&apos;accueil</Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/contact">
-              Nous contacter
-            </Link>
+            <Link href="/contact">Nous contacter</Link>
           </Button>
         </div>
       </div>

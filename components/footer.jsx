@@ -16,31 +16,31 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-gray-400 mb-4">
-              Votre source d'information sur la technologie, la mode, les voyages,
-              les loisirs et le bien-être.
+              Votre source d&apos;information sur la technologie, la mode, les
+              voyages, les loisirs et le bien-être.
             </p>
             <div className="flex space-x-4">
-              <Link 
-                href="https://facebook.com" 
-                target="_blank" 
+              <Link
+                href="https://facebook.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <Facebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
               </Link>
-              <Link 
-                href="https://twitter.com" 
-                target="_blank" 
+              <Link
+                href="https://twitter.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
-              <Link 
-                href="https://instagram.com" 
-                target="_blank" 
+              <Link
+                href="https://instagram.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
               >
@@ -52,30 +52,47 @@ export default function Footer() {
 
           {/* Categories */}
           <div className="col-span-1">
-            <h3 className="font-serif text-lg font-semibold mb-4">Catégories</h3>
+            <h3 className="font-serif text-lg font-semibold mb-4">
+              Catégories
+            </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/categorie/technologie" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/categorie/technologie"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Technologie
                 </Link>
               </li>
               <li>
-                <Link href="/categorie/mode-et-beaute" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/categorie/mode-et-beaute"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Mode et beauté
                 </Link>
               </li>
               <li>
-                <Link href="/categorie/voyage" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/categorie/voyage"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Voyage
                 </Link>
               </li>
               <li>
-                <Link href="/categorie/loisirs" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/categorie/loisirs"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Loisirs
                 </Link>
               </li>
               <li>
-                <Link href="/categorie/sante-et-bien-etre" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/categorie/sante-et-bien-etre"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Santé et Bien-être
                 </Link>
               </li>
@@ -84,25 +101,39 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="col-span-1">
-            <h3 className="font-serif text-lg font-semibold mb-4">Liens Rapides</h3>
+            <h3 className="font-serif text-lg font-semibold mb-4">
+              Liens Rapides
+            </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/a-propos" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/a-propos"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   À propos
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/contact"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/mentions-legales" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/mentions-legales"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Mentions légales
                 </Link>
               </li>
               <li>
-                <Link href="/politique-de-confidentialite" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  href="/politique-de-confidentialite"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Politique de confidentialité
                 </Link>
               </li>
@@ -111,9 +142,12 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div className="col-span-1 lg:col-span-1">
-            <h3 className="font-serif text-lg font-semibold mb-4">Newsletter</h3>
+            <h3 className="font-serif text-lg font-semibold mb-4">
+              Newsletter
+            </h3>
             <p className="text-gray-400 mb-4">
-              Abonnez-vous à notre newsletter pour recevoir nos derniers articles.
+              Abonnez-vous à notre newsletter pour recevoir nos derniers
+              articles.
             </p>
             <form className="space-y-2">
               <Input
@@ -122,13 +156,16 @@ export default function Footer() {
                 className="bg-gray-800 border-gray-700"
                 required
               />
-              <Button className="w-full">S'abonner</Button>
+              <Button className="w-full">S&apos;abonner</Button>
             </form>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-          <p>© {new Date().getFullYear()} Les Pros de Cherbourg. Tous droits réservés.</p>
+          <p>
+            © {new Date().getFullYear()} Les Pros de Cherbourg. Tous droits
+            réservés.
+          </p>
         </div>
       </div>
     </footer>
