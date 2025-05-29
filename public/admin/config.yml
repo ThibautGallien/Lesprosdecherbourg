@@ -2,8 +2,8 @@ backend:
   name: github
   repo: ThibautGallien/Lesprosdecherbourg
   branch: main
-  site_domain: lesprosdecherbourg.fr
-  auth_endpoint: api/auth/callback
+  base_url: https://decap-oauth.vercel.app
+  auth_endpoint: /api/auth
 
 # Configuration locale
 locale: "fr"
