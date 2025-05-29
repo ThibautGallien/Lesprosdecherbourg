@@ -3,6 +3,7 @@ backend:
   repo: ThibautGallien/Lesprosdecherbourg
   branch: main
   site_domain: lesprosdecherbourg.fr
+  auth_endpoint: api/auth/callback
 
 # Configuration locale
 locale: "fr"
