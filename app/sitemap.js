@@ -1,8 +1,23 @@
-import { getAllArticles, categoryInfo } from "@/lib/data";
+import { getLatestArticles, categoryInfo } from "@/lib/data";
 
 export default function sitemap() {
   const baseUrl = "https://lesprosdecherbourg.fr";
-  const articles = getAllArticles();
+  // Utilisez getLatestArticles avec une limite élevée pour récupérer tous les articles
+  const articles = getLatestArticles(1000); // Ajustez selon vos besoins
+
+  // Fonction utilitaire pour gérer les dates
+  function getSafeDate(dateValue) {
+    if (!dateValue) return new Date();
+
+    // Si c'est déjà un objet Date
+    if (dateValue instanceof Date) {
+      return isNaN(dateValue.getTime()) ? new Date() : dateValue;
+    }
+
+    // Si c'est une string, essayer de la parser
+    const parsedDate = new Date(dateValue);
+    return isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
+  }
 
   // Pages statiques avec leurs priorités et fréquences de mise à jour
   const staticPages = [
@@ -55,10 +70,10 @@ export default function sitemap() {
     };
   });
 
-  // Articles individuels
+  // Articles individuels avec gestion sécurisée des dates
   const articlePages = articles.map((article) => ({
     url: `${baseUrl}/articles/${article.slug}`,
-    lastModified: new Date(article.date),
+    lastModified: getSafeDate(article.date || article.publishedAt),
     changeFrequency: "monthly",
     priority: 0.7,
   }));
