@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -15,9 +15,9 @@ export default function FeaturedArticles({ articles }) {
   const [isPaused, setIsPaused] = useState(false);
 
   // Fonctions de navigation simplifiées
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % articles.length);
-  };
+  }, [articles.length]);
 
   const goToPrev = () => {
     setCurrentIndex((prev) => (prev - 1 + articles.length) % articles.length);
@@ -33,7 +33,7 @@ export default function FeaturedArticles({ articles }) {
 
     const interval = setInterval(goToNext, 6000);
     return () => clearInterval(interval);
-  }, [isPaused, articles.length]);
+  }, [isPaused, articles.length, goToNext]);
 
   if (!articles.length) return null;
 

@@ -2,6 +2,8 @@ import "./globals.css";
 import { Inter, Playfair_Display } from "next/font/google";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import GoogleAnalytics from "@/components/google-analytics";
+import CookieBanner from "@/components/cookie-banner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
@@ -37,7 +39,7 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://lesprosdecherbourg.fr"), // Remplace par ton domaine
+  metadataBase: new URL("https://lesprosdecherbourg.fr"),
   alternates: {
     canonical: "/",
   },
@@ -76,16 +78,26 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "ton-code-google-search-console", // À remplacer
-    // bing: 'ton-code-bing',
-  },
+  // verification: {
+  //   google: "ton-code-google-search-console", // À remettre après déploiement
+  // },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={`${inter.variable} ${playfair.variable}`}>
+      <head>
+        {/* Preconnect pour les performances */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+      </head>
       <body className="font-sans antialiased">
+        {/* Google Analytics avec votre ID */}
+        <GoogleAnalytics measurementId="G-5S911D29Y9" />
+
+        {/* Bandeau cookies professionnel */}
+        <CookieBanner />
+
         <Header />
         <main>{children}</main>
         <Footer />

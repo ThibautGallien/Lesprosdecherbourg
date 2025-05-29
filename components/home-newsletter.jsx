@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Send, Check, AlertCircle } from "lucide-react";
 
-export default function NewsletterSection() {
+export default function HomeNewsletter() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,13 +12,15 @@ export default function NewsletterSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email) return;
+    if (!email || !email.includes("@")) {
+      setError("Veuillez entrer un email valide");
+      return;
+    }
 
     setIsLoading(true);
     setError("");
 
     try {
-      // Appel à votre API ActiveCampaign
       const response = await fetch("/api/newsletter", {
         method: "POST",
         headers: {
@@ -28,8 +28,8 @@ export default function NewsletterSection() {
         },
         body: JSON.stringify({
           email,
-          source: "newsletter_footer",
-          tags: ["newsletter", "site-web"],
+          source: "homepage_newsletter",
+          tags: ["newsletter", "homepage"],
         }),
       });
 
@@ -39,7 +39,6 @@ export default function NewsletterSection() {
         setIsSubmitted(true);
         setEmail("");
 
-        // Reset success state after 5 seconds
         setTimeout(() => {
           setIsSubmitted(false);
         }, 5000);
@@ -48,7 +47,7 @@ export default function NewsletterSection() {
       }
     } catch (err) {
       console.error("Erreur newsletter:", err);
-      setError(err.message || "Une erreur est survenue. Veuillez réessayer.");
+      setError("Une erreur est survenue. Veuillez réessayer.");
     } finally {
       setIsLoading(false);
     }
@@ -70,40 +69,40 @@ export default function NewsletterSection() {
             onSubmit={handleSubmit}
             className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
           >
-            <Input
+            <input
               type="email"
               placeholder="Votre adresse email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="flex-grow"
               disabled={isSubmitted || isLoading}
+              className="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
-            <Button
+            <button
               type="submit"
               disabled={isSubmitted || isLoading || !email}
-              className="whitespace-nowrap"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 whitespace-nowrap disabled:cursor-not-allowed"
             >
               {isLoading ? (
-                <span className="flex items-center">
-                  <div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-r-transparent rounded-full" />
+                <>
+                  <div className="animate-spin h-4 w-4 border-2 border-white border-r-transparent rounded-full" />
                   Inscription...
-                </span>
+                </>
               ) : isSubmitted ? (
-                <span className="flex items-center">
-                  <Check className="h-4 w-4 mr-2" />
+                <>
+                  <Check className="h-4 w-4" />
                   Inscrit !
-                </span>
+                </>
               ) : (
-                <span className="flex items-center">
-                  <Send className="h-4 w-4 mr-2" />
-                  S&rsquo;abonner
-                </span>
+                <>
+                  <Send className="h-4 w-4" />
+                  S&apos;abonner
+                </>
               )}
-            </Button>
+            </button>
           </form>
 
-          {/* Message d'erreur */}
+          {/* Messages */}
           {error && (
             <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center justify-center text-red-700 text-sm">
               <AlertCircle className="h-4 w-4 mr-2" />
@@ -111,7 +110,6 @@ export default function NewsletterSection() {
             </div>
           )}
 
-          {/* Message de succès */}
           {isSubmitted && (
             <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
               ✅ Merci ! Vous êtes maintenant abonné à notre newsletter.
@@ -122,7 +120,7 @@ export default function NewsletterSection() {
             En vous inscrivant, vous acceptez notre{" "}
             <a
               href="/politique-confidentialite"
-              className="underline hover:text-primary"
+              className="underline hover:text-blue-600"
             >
               politique de confidentialité
             </a>

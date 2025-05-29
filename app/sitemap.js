@@ -1,52 +1,68 @@
-import { getLatestArticles, categoryInfo } from "@/lib/data";
+import { getAllArticles, categoryInfo } from "@/lib/data";
 
 export default function sitemap() {
-  const baseUrl = "https://lesprosdecherbourg.fr"; // Remplace par ton domaine
+  const baseUrl = "https://lesprosdecherbourg.fr";
+  const articles = getAllArticles();
 
-  // URLs statiques
-  const staticUrls = [
+  // Pages statiques avec leurs priorités et fréquences de mise à jour
+  const staticPages = [
     {
       url: baseUrl,
       lastModified: new Date(),
       changeFrequency: "daily",
-      priority: 1,
+      priority: 1.0,
     },
     {
       url: `${baseUrl}/articles`,
       lastModified: new Date(),
       changeFrequency: "daily",
-      priority: 0.8,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/a-propos`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.5,
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.5,
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/mentions-legales`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/politique-confidentialite`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
   ];
 
-  // URLs des catégories
-  const categoryUrls = Object.values(categoryInfo).map((category) => ({
-    url: `${baseUrl}/categorie/${category.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
+  // Pages de catégories
+  const categoryPages = Object.keys(categoryInfo).map((key) => {
+    const category = categoryInfo[key];
+    return {
+      url: `${baseUrl}/categories/${category.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    };
+  });
+
+  // Articles individuels
+  const articlePages = articles.map((article) => ({
+    url: `${baseUrl}/articles/${article.slug}`,
+    lastModified: new Date(article.date),
+    changeFrequency: "monthly",
     priority: 0.7,
   }));
 
-  // URLs des articles
-  const articles = getLatestArticles(1000); // Tous les articles
-  const articleUrls = articles.map((article) => ({
-    url: `${baseUrl}/categorie/${article.category}/${article.slug}`,
-    lastModified: new Date(article.publishedAt),
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
-
-  return [...staticUrls, ...categoryUrls, ...articleUrls];
+  // Combiner toutes les URLs
+  return [...staticPages, ...categoryPages, ...articlePages];
 }

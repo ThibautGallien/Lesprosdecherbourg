@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export default function AdminRedirect() {
   useEffect(() => {
-    // Redirection vers l'interface admin
+    // Redirection vers l&rsquo;interface admin
     window.location.href = "/admin/index.html";
   }, []);
 
@@ -12,7 +12,7 @@ export default function AdminRedirect() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-bold mb-4">
-          Redirection vers l'administration...
+          Redirection vers l&rsquo;administration...
         </h1>
         <p>
           Si la redirection ne fonctionne pas,{" "}

@@ -4,10 +4,10 @@ import {
   getArticlesByCategory,
   categoryInfo,
 } from "@/lib/data";
-import FeaturedArticles from "@/components/featured-articles"; // 👈 AJOUT DE L'IMPORT
+import FeaturedArticles from "@/components/featured-articles";
 import ArticleCard from "@/components/article-card";
 import CategoryPreview from "@/components/category-preview";
-import NewsletterSection from "@/components/newsletter-section";
+import HomeNewsletter from "@/components/home-newsletter"; // 👈 CHANGÉ ICI
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -59,7 +59,7 @@ export default function Home() {
       ))}
 
       {/* Newsletter Section */}
-      <NewsletterSection />
+      <HomeNewsletter />
 
       {/* More Category Previews - show remaining categories */}
       {categoryPreviews.slice(2).map(({ category, articles }) => (

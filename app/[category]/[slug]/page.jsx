@@ -150,7 +150,7 @@ export default function ArticlePage({ params }) {
                   }}
                 />
               ) : (
-                <p>Contenu de l'article à venir...</p>
+                <p>Contenu de l&rsquo;article à venir...</p>
               )}
             </div>
 
