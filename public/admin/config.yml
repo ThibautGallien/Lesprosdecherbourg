@@ -2,7 +2,7 @@ backend:
   name: github
   repo: ThibautGallien/Lesprosdecherbourg
   branch: main
-  base_url: https://decap-oauth.vercel.app
+  base_url: https://decap-oauth-tawny.vercel.app
   auth_endpoint: /api/auth
 
 # Configuration locale
