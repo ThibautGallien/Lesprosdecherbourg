@@ -3,7 +3,7 @@ const nextConfig = {
   images: {
     domains: ["images.unsplash.com", "images.pexels.com", "localhost"],
   },
-  // Configuration pour servir les fichiers admin
+
   async redirects() {
     return [
       {
@@ -11,14 +11,15 @@ const nextConfig = {
         has: [
           {
             type: "host",
-            value: "www.lesprosdecherbourg.fr",
+            value: "lesprosdecherbourg.fr",
           },
         ],
-        destination: "https://lesprosdecherbourg.fr/:path*",
+        destination: "https://www.lesprosdecherbourg.fr/:path*",
         permanent: true,
       },
     ];
   },
+
   async rewrites() {
     return [
       {
