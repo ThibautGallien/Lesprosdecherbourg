@@ -2,8 +2,7 @@ backend:
   name: github
   repo: ThibautGallien/Lesprosdecherbourg
   branch: main
-  base_url: https://lesprosdecherbourg.fr
-  auth_endpoint: api/auth/callback
+  site_domain: lesprosdecherbourg.fr
 
 # Configuration locale
 locale: "fr"
