@@ -10,10 +10,7 @@ export default function ArticleCard({ article }) {
 
   return (
     <article className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      <Link
-        href={`/categorie/${article.category}/${article.slug}`}
-        className="block"
-      >
+      <Link href={`/${article.category}/${article.slug}`} className="block">
         <div className="relative h-48 w-full">
           <Image
             src={article.image || "/images/placeholder.jpg"}
@@ -32,7 +29,7 @@ export default function ArticleCard({ article }) {
       </Link>
 
       <div className="p-6">
-        <Link href={`/categorie/${article.category}/${article.slug}`}>
+        <Link href={`/${article.category}/${article.slug}`}>
           <h3 className="text-xl font-serif font-bold mb-2 line-clamp-2 hover:text-primary transition-colors">
             {article.title}
           </h3>
@@ -58,7 +55,7 @@ export default function ArticleCard({ article }) {
 
         <div className="mt-4">
           <Link
-            href={`/categorie/${article.category}/${article.slug}`}
+            href={`/${article.category}/${article.slug}`}
             className="inline-flex items-center text-primary hover:text-primary/80 font-medium transition-colors"
           >
             Lire la suite
