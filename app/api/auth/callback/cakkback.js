@@ -1,14 +1,11 @@
-import { NextResponse } from "next/server";
-
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const code = searchParams.get("code");
+export default async function handler(req, res) {
+  const { code } = req.query;
 
   console.log("🔐 Auth callback reçu, code:", code ? "OUI" : "NON");
 
   if (!code) {
     console.log("❌ Pas de code fourni");
-    return NextResponse.json({ error: "No code provided" }, { status: 400 });
+    return res.status(400).json({ error: "No code provided" });
   }
 
   try {
@@ -39,24 +36,19 @@ export async function GET(request) {
     if (data.access_token) {
       const redirectUrl = `${process.env.NEXTAUTH_URL}/admin/#access_token=${data.access_token}&token_type=bearer`;
       console.log("✅ Redirection vers le CMS");
-      return NextResponse.redirect(redirectUrl);
+      return res.redirect(redirectUrl);
     } else {
       console.log("❌ Échec obtention token:", data);
-      return NextResponse.json(
-        { error: "Failed to get access token", details: data },
-        { status: 400 }
-      );
+      return res.status(400).json({
+        error: "Failed to get access token",
+        details: data,
+      });
     }
   } catch (error) {
     console.log("💥 Erreur auth:", error);
-    return NextResponse.json(
-      { error: "Authentication failed", details: error.message },
-      { status: 500 }
-    );
+    return res.status(500).json({
+      error: "Authentication failed",
+      details: error.message,
+    });
   }
-}
-
-// Support pour les requêtes POST aussi (au cas où)
-export async function POST(request) {
-  return GET(request);
 }
