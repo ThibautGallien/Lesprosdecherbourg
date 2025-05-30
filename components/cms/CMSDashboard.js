@@ -1,5 +1,5 @@
 // components/cms/CMSDashboard.js
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Settings,
   FileText,
@@ -46,9 +46,9 @@ export default function CMSDashboard() {
     if (isAuthenticated && currentSiteConfig) {
       loadArticles();
     }
-  }, [currentSite, isAuthenticated]);
+  }, [currentSite, isAuthenticated, currentSiteConfig, loadArticles]);
 
-  const showMessage = (message, type = "success") => {
+  const showMessage = useCallback((message, type = "success") => {
     if (type === "success") {
       setSuccess(message);
       setError(null);
@@ -60,10 +60,10 @@ export default function CMSDashboard() {
       setSuccess(null);
       setError(null);
     }, 5000);
-  };
+  }, []);
 
   // 🔧 NOUVELLE FONCTION loadArticles avec API routes
-  const loadArticles = async () => {
+  const loadArticles = useCallback(async () => {
     try {
       setLoading(true);
       console.log("🔍 Chargement des articles via API route...");
@@ -96,10 +96,10 @@ export default function CMSDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [processGitHubFiles, showMessage]);
 
   // 🔧 NOUVELLE FONCTION pour traiter les fichiers GitHub
-  const processGitHubFiles = async (files) => {
+  const processGitHubFiles = useCallback(async (files) => {
     const articles = [];
 
     for (const file of files) {
@@ -133,7 +133,7 @@ export default function CMSDashboard() {
     return articles.sort(
       (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
     );
-  };
+  }, []);
 
   // 🔧 FONCTION ROBUSTE pour parser le Markdown
   const parseMarkdownArticle = (content, filename) => {
@@ -303,7 +303,11 @@ export default function CMSDashboard() {
 
   // 🔧 FONCTION DE SUPPRESSION mise à jour
   const handleDeleteArticle = async (article) => {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${article.title}" ?`)) {
+    if (
+      !confirm(
+        `Êtes-vous sûr de vouloir supprimer &quot;${article.title}&quot; ?`
+      )
+    ) {
       return;
     }
 
@@ -388,7 +392,7 @@ export default function CMSDashboard() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nom d'utilisateur
+                Nom d&apos;utilisateur
               </label>
               <input
                 type="text"
@@ -431,7 +435,7 @@ export default function CMSDashboard() {
             </button>
           </div>
           <p className="text-xs text-gray-500 mt-4 text-center">
-            Utilisez vos identifiants d'administrateur
+            Utilisez vos identifiants d&apos;administrateur
           </p>
         </div>
       </div>

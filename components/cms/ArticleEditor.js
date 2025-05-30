@@ -133,7 +133,7 @@ export default function ArticleEditor({
             : formData.title,
       }));
     }
-  }, [formData.title]);
+  }, [formData.title, formData.seoTitle]);
 
   // Calculer temps de lecture
   useEffect(() => {
@@ -521,6 +521,7 @@ export default function ArticleEditor({
                       <a
                         href="https://www.markdownguide.org/basic-syntax/"
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="text-blue-600 hover:underline ml-1"
                       >
                         Guide de syntaxe
@@ -795,7 +796,7 @@ export default function ArticleEditor({
                       <div className="text-blue-600 text-lg hover:underline cursor-pointer">
                         {formData.seoTitle ||
                           formData.title ||
-                          "Titre de l'article"}
+                          "Titre de l&apos;article"}
                       </div>
                       <div className="text-green-700 text-sm">
                         {siteConfig?.domain}/articles/
@@ -805,7 +806,7 @@ export default function ArticleEditor({
                         {(
                           formData.seoDescription ||
                           formData.excerpt ||
-                          "Description de l'article qui apparaîtra dans les résultats de recherche..."
+                          "Description de l&apos;article qui apparaîtra dans les résultats de recherche..."
                         ).substring(0, 160)}
                       </div>
                     </div>
@@ -906,7 +907,7 @@ export default function ArticleEditor({
                     <ImageIcon className="w-12 h-12 mx-auto mb-2 text-gray-400" />
                     <p>Aucune image uploadée</p>
                     <p className="text-sm">
-                      Cliquez sur "Ajouter des images" pour commencer
+                      Cliquez sur &quot;Ajouter des images&quot; pour commencer
                     </p>
                   </div>
                 )}
@@ -1175,7 +1176,7 @@ export default function ArticleEditor({
                     }}
                     className="mt-2 text-blue-600 hover:underline text-sm"
                   >
-                    Aller à l'onglet Images pour en ajouter
+                    Aller à l&apos;onglet Images pour en ajouter
                   </button>
                 </div>
               )}
@@ -1190,13 +1191,13 @@ export default function ArticleEditor({
           <div className="p-6">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">Aperçu de l'article</h2>
+                <h2 className="text-2xl font-bold">Aperçu de l&apos;article</h2>
                 <button
                   onClick={() => setShowPreview(false)}
                   className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
                 >
                   <X className="w-4 h-4" />
-                  <span>Fermer l'aperçu</span>
+                  <span>Fermer l&apos;aperçu</span>
                 </button>
               </div>
 

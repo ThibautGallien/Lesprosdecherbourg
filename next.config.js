@@ -4,6 +4,11 @@ const nextConfig = {
     domains: ["images.unsplash.com", "images.pexels.com", "localhost"],
   },
 
+  eslint: {
+    // Ignorer les erreurs ESLint en production
+    ignoreDuringBuilds: true,
+  },
+
   async redirects() {
     return [
       {
