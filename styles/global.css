@@ -1,0 +1,309 @@
+/* styles/globals.css - Ajoutez ces styles à votre fichier existant */
+
+/* Styles pour l'éditeur Markdown */
+.w-md-editor {
+  background-color: #ffffff !important;
+}
+
+.w-md-editor-text-container .w-md-editor-text {
+  background-color: #ffffff !important;
+  color: #374151 !important;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.w-md-editor-text-container .w-md-editor-text:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* Toolbar de l'éditeur */
+.w-md-editor-toolbar {
+  background-color: #f9fafb !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  padding: 8px 12px;
+}
+
+.w-md-editor-toolbar ul li button {
+  color: #6b7280 !important;
+  border-radius: 4px;
+  margin: 0 2px;
+}
+
+.w-md-editor-toolbar ul li button:hover {
+  background-color: #e5e7eb !important;
+  color: #374151 !important;
+}
+
+/* Preview du markdown */
+.w-md-editor-preview {
+  background-color: #ffffff !important;
+  padding: 16px !important;
+}
+
+.w-md-editor-preview h1,
+.w-md-editor-preview h2,
+.w-md-editor-preview h3,
+.w-md-editor-preview h4,
+.w-md-editor-preview h5,
+.w-md-editor-preview h6 {
+  color: #111827;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.w-md-editor-preview h1 {
+  font-size: 2rem;
+}
+.w-md-editor-preview h2 {
+  font-size: 1.5rem;
+}
+.w-md-editor-preview h3 {
+  font-size: 1.25rem;
+}
+
+.w-md-editor-preview p {
+  color: #374151;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.w-md-editor-preview blockquote {
+  border-left: 4px solid #3b82f6;
+  padding-left: 16px;
+  margin: 16px 0;
+  color: #6b7280;
+  font-style: italic;
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.w-md-editor-preview code {
+  background-color: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.875rem;
+  color: #dc2626;
+}
+
+.w-md-editor-preview pre {
+  background-color: #1f2937 !important;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.w-md-editor-preview pre code {
+  background-color: transparent;
+  color: #e5e7eb;
+  padding: 0;
+}
+
+.w-md-editor-preview ul,
+.w-md-editor-preview ol {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+
+.w-md-editor-preview li {
+  margin-bottom: 8px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.w-md-editor-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.875rem;
+}
+
+.w-md-editor-preview th,
+.w-md-editor-preview td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.w-md-editor-preview th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.w-md-editor-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 16px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations pour le CMS */
+.cms-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cms-slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Loading spinner personnalisé */
+.cms-loading {
+  position: relative;
+}
+
+.cms-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Styles pour les tags */
+.cms-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 2px;
+  transition: all 0.2s;
+}
+
+.cms-tag:hover {
+  background-color: #bfdbfe;
+  transform: translateY(-1px);
+}
+
+/* Styles pour les notifications */
+.cms-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  min-width: 300px;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.cms-notification.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.cms-notification.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .w-md-editor {
+    font-size: 14px;
+  }
+
+  .w-md-editor-toolbar {
+    padding: 4px 8px;
+  }
+
+  .w-md-editor-toolbar ul li button {
+    margin: 0 1px;
+    padding: 4px;
+  }
+
+  .cms-notification {
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+  }
+}
+
+/* Dark mode pour l'éditeur (optionnel) */
+@media (prefers-color-scheme: dark) {
+  .w-md-editor {
+    background-color: #1f2937 !important;
+  }
+
+  .w-md-editor-text-container .w-md-editor-text {
+    background-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+  }
+
+  .w-md-editor-toolbar {
+    background-color: #374151 !important;
+    border-bottom-color: #4b5563 !important;
+  }
+
+  .w-md-editor-toolbar ul li button {
+    color: #d1d5db !important;
+  }
+
+  .w-md-editor-toolbar ul li button:hover {
+    background-color: #4b5563 !important;
+  }
+
+  .w-md-editor-preview {
+    background-color: #1f2937 !important;
+    color: #f3f4f6;
+  }
+}

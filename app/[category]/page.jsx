@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import ArticleCard from "@/components/article-card";
 import { ArrowLeft } from "lucide-react";
 
-export default function CategoryPage({ params }) {
-  const { category: categorySlug } = params;
+export default async function CategoryPage({ params }) {
+  // Attendre les params avant de les utiliser (Next.js 15)
+  const resolvedParams = await params;
+  const { category: categorySlug } = resolvedParams;
 
   // Vérifier que la catégorie existe
   const category = Object.values(categoryInfo).find(
@@ -214,8 +216,10 @@ function getCategoryColor(color) {
 }
 
 // Génération des métadonnées
-export function generateMetadata({ params }) {
-  const { category: categorySlug } = params;
+export async function generateMetadata({ params }) {
+  // Attendre les params avant de les utiliser (Next.js 15)
+  const resolvedParams = await params;
+  const { category: categorySlug } = resolvedParams;
 
   const category = Object.values(categoryInfo).find(
     (cat) => cat.slug === categorySlug

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Menu, Search, X } from "lucide-react";
@@ -20,14 +21,29 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  const pathname = usePathname();
+
+  // Masquer le header sur les pages admin
+  const isAdminPage = pathname?.startsWith("/admin");
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    setMounted(true);
+
+    if (!isAdminPage) {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 50);
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+  }, [isAdminPage]);
+
+  // Ne pas afficher le header sur les pages admin ou avant hydratation
+  if (!mounted || isAdminPage) {
+    return null;
+  }
 
   return (
     <header
@@ -74,6 +90,7 @@ export default function Header() {
               size="icon"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               aria-label="Rechercher"
+              suppressHydrationWarning
             >
               <Search className="h-5 w-5" />
             </Button>
@@ -88,6 +105,7 @@ export default function Header() {
               aria-label={
                 isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"
               }
+              suppressHydrationWarning
             >
               {isMobileMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -114,6 +132,7 @@ export default function Header() {
                   placeholder="Rechercher sur le blog..."
                   className="w-full pl-10 pr-4 py-2"
                   autoFocus
+                  suppressHydrationWarning
                 />
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               </div>
@@ -148,6 +167,7 @@ export default function Header() {
                   type="search"
                   placeholder="Rechercher sur le blog..."
                   className="w-full"
+                  suppressHydrationWarning
                 />
               </div>
             </div>

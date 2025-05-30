@@ -8,8 +8,10 @@ import { Clock, User, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ArticleCard from "@/components/article-card";
 
-export default function ArticlePage({ params }) {
-  const { category, slug } = params;
+export default async function ArticlePage({ params }) {
+  // Attendre les params avant de les utiliser (Next.js 15)
+  const resolvedParams = await params;
+  const { category, slug } = resolvedParams;
 
   // Récupérer l'article par slug
   const article = getArticleBySlug(slug);
@@ -199,8 +201,11 @@ export default function ArticlePage({ params }) {
 }
 
 // Génération des métadonnées pour le SEO
-export function generateMetadata({ params }) {
-  const { category, slug } = params;
+export async function generateMetadata({ params }) {
+  // Attendre les params avant de les utiliser (Next.js 15)
+  const resolvedParams = await params;
+  const { category, slug } = resolvedParams;
+
   const article = getArticleBySlug(slug);
 
   if (!article || article.category !== category) {

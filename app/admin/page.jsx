@@ -1,26 +1,41 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-export default function AdminRedirect() {
+// Import dynamique pour éviter les erreurs SSR
+const CMSDashboard = dynamic(
+  () => import("../../components/cms/CMSDashboard"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Chargement du CMS...</p>
+        </div>
+      </div>
+    ),
+  }
+);
+
+export default function AdminPage() {
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
-    // Redirection vers l&rsquo;interface admin
-    window.location.href = "/admin/index.html";
+    setIsClient(true);
   }, []);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">
-          Redirection vers l&rsquo;administration...
-        </h1>
-        <p>
-          Si la redirection ne fonctionne pas,{" "}
-          <a href="/admin/index.html" className="text-blue-600 hover:underline">
-            cliquez ici
-          </a>
-        </p>
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Initialisation...</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <CMSDashboard />;
 }
