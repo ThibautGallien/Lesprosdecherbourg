@@ -1,41 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-
-// Import dynamique pour éviter les erreurs SSR
-const CMSDashboard = dynamic(
-  () => import("../../components/cms/CMSDashboard"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement du CMS...</p>
-        </div>
-      </div>
-    ),
-  }
-);
+import CMSDashboard from "../../components/cms/CMSDashboard";
 
 export default function AdminPage() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Initialisation...</p>
-        </div>
-      </div>
-    );
-  }
-
   return <CMSDashboard />;
 }
