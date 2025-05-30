@@ -5,8 +5,12 @@ const nextConfig = {
   },
 
   eslint: {
-    // Ignorer les erreurs ESLint en production
     ignoreDuringBuilds: true,
+  },
+
+  // ✅ AJOUTEZ CETTE SECTION
+  experimental: {
+    esmExternals: "loose",
   },
 
   async redirects() {
