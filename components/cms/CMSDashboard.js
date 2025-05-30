@@ -14,7 +14,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { getAllSites, getSiteConfig } from "../../config/sites";
-import { GitHubAPI } from "../../lib/github";
 import ArticleEditor from "./ArticleEditor";
 
 export default function CMSDashboard() {
@@ -31,10 +30,6 @@ export default function CMSDashboard() {
 
   const sites = getAllSites();
   const currentSiteConfig = getSiteConfig(currentSite);
-  const githubAPI = new GitHubAPI(
-    currentSiteConfig?.repo,
-    currentSiteConfig?.branch
-  );
 
   const categories = currentSiteConfig?.content?.articles?.fields?.find(
     (field) => field.name === "category"
@@ -67,26 +62,199 @@ export default function CMSDashboard() {
     }, 5000);
   };
 
+  // 🔧 NOUVELLE FONCTION loadArticles avec API routes
   const loadArticles = async () => {
     try {
       setLoading(true);
-      const articlesData = await githubAPI.getArticles(currentSiteConfig);
-      setArticles(articlesData);
+      console.log("🔍 Chargement des articles via API route...");
+
+      const response = await fetch("/api/cms/github/articles", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("📡 Response status:", response.status);
+
+      if (!response.ok) {
+        throw new Error(`Erreur API: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("📦 Articles reçus:", data);
+
+      // Traitement des données GitHub pour les transformer en articles
+      const processedArticles = await processGitHubFiles(data);
+      console.log("✅ Articles traités:", processedArticles);
+
+      setArticles(processedArticles);
+      showMessage(`${processedArticles.length} article(s) chargé(s)`);
     } catch (error) {
-      console.error("Erreur chargement articles:", error);
+      console.error("❌ Erreur chargement articles:", error);
       showMessage("Erreur lors du chargement des articles", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLogin = () => {
-    // Auth simple pour demo - remplacer par votre système d'auth
-    if (loginData.username === "admin" && loginData.password === "admin123") {
-      setIsAuthenticated(true);
-      showMessage("Connexion réussie !");
-    } else {
-      showMessage("Identifiants incorrects", "error");
+  // 🔧 NOUVELLE FONCTION pour traiter les fichiers GitHub
+  const processGitHubFiles = async (files) => {
+    const articles = [];
+
+    for (const file of files) {
+      if (file.name.endsWith(".md")) {
+        try {
+          // Récupérer le contenu de chaque fichier
+          const response = await fetch(
+            `/api/cms/github/article/${file.name.replace(".md", "")}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (response.ok) {
+            const fileData = await response.json();
+            const content = atob(fileData.content); // Décoder base64
+            const article = parseMarkdownArticle(content, file.name);
+            if (article) {
+              articles.push(article);
+            }
+          }
+        } catch (error) {
+          console.error(`Erreur traitement fichier ${file.name}:`, error);
+        }
+      }
+    }
+
+    return articles.sort(
+      (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+    );
+  };
+
+  // 🔧 FONCTION ROBUSTE pour parser le Markdown
+  const parseMarkdownArticle = (content, filename) => {
+    try {
+      // Extraire les métadonnées front matter
+      const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+      if (!frontMatterMatch) return null;
+
+      const frontMatter = frontMatterMatch[1];
+      const articleContent = content.replace(/^---\n[\s\S]*?\n---\n/, "");
+
+      // Parser les métadonnées
+      const metadata = {};
+      frontMatter.split("\n").forEach((line) => {
+        const [key, ...valueParts] = line.split(":");
+        if (key && valueParts.length > 0) {
+          let value = valueParts
+            .join(":")
+            .trim()
+            .replace(/^["']|["']$/g, "");
+
+          // ✅ CORRECTION ROBUSTE : Gestion spéciale pour les tags (array)
+          if (key.trim() === "tags") {
+            // Gestion des différents formats de tags
+            if (value.startsWith("[") && value.endsWith("]")) {
+              // Format: [tag1, tag2, tag3] ou ["tag1", "tag2", "tag3"]
+              value = value.slice(1, -1); // Enlever les crochets
+              metadata[key.trim()] = value
+                .split(",")
+                .map((tag) => tag.trim().replace(/^["']|["']$/g, ""))
+                .filter((tag) => tag.length > 0);
+            } else if (value.includes(",")) {
+              // Format: tag1, tag2, tag3
+              metadata[key.trim()] = value
+                .split(",")
+                .map((tag) => tag.trim())
+                .filter((tag) => tag.length > 0);
+            } else if (value.length > 0) {
+              // Tag unique
+              metadata[key.trim()] = [value];
+            } else {
+              // Pas de tags
+              metadata[key.trim()] = [];
+            }
+          } else {
+            metadata[key.trim()] = value;
+          }
+        }
+      });
+
+      const result = {
+        id: filename.replace(".md", ""),
+        title: metadata.title || "Sans titre",
+        slug: metadata.slug || filename.replace(".md", ""),
+        excerpt: metadata.excerpt || "",
+        category: metadata.category || "non-categorise",
+        publishedAt:
+          metadata.publishedAt || metadata.date || new Date().toISOString(),
+        draft: metadata.draft === "true" || metadata.draft === true,
+        content: articleContent,
+        path: `content/articles/${filename}`,
+        author: metadata.author || "Admin",
+        // ✅ TRIPLE PROTECTION : Assurer que tags est toujours un array
+        tags: Array.isArray(metadata.tags)
+          ? metadata.tags
+          : metadata.tags
+          ? typeof metadata.tags === "string" && metadata.tags.includes(",")
+            ? metadata.tags
+                .split(",")
+                .map((t) => t.trim())
+                .filter((t) => t.length > 0)
+            : [metadata.tags]
+          : [],
+        ...metadata,
+      };
+
+      console.log("🔍 Article parsé:", result.title, "Tags:", result.tags);
+      return result;
+    } catch (error) {
+      console.error("Erreur parsing article:", error);
+      return null;
+    }
+  };
+
+  // 🔧 FONCTION DE CONNEXION (inchangée)
+  const handleLogin = async () => {
+    console.log("🚀 DEBUT handleLogin");
+    console.log("📝 loginData:", loginData);
+    console.log("🌐 URL appelée:", "/api/auth/cms-login");
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/auth/cms-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      console.log("📡 Response reçue:", response);
+      console.log("📊 Response status:", response.status);
+
+      const data = await response.json();
+      console.log("📦 Data reçue:", data);
+
+      if (data.success) {
+        console.log("✅ Connexion réussie!");
+        setIsAuthenticated(true);
+        showMessage("Connexion réussie !");
+      } else {
+        console.log("❌ Connexion échouée:", data.message);
+        showMessage(data.message || "Identifiants incorrects", "error");
+      }
+    } catch (error) {
+      console.error("💥 Erreur catch:", error);
+      showMessage("Erreur de connexion", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,25 +268,40 @@ export default function CMSDashboard() {
     setShowEditor(true);
   };
 
+  // 🔧 FONCTION DE SAUVEGARDE mise à jour
   const handleSaveArticle = async (articleData) => {
     try {
       setLoading(true);
-      const isUpdate = !!editingArticle;
+      console.log("💾 Sauvegarde article:", articleData);
 
-      await githubAPI.saveArticle(articleData, currentSiteConfig, isUpdate);
+      const response = await fetch("/api/cms/github/save-article", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(articleData),
+      });
 
-      showMessage(`Article ${isUpdate ? "mis à jour" : "créé"} avec succès !`);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Erreur lors de la sauvegarde");
+      }
+
+      console.log("✅ Article sauvegardé:", result);
+      showMessage(result.message || "Article sauvegardé avec succès !");
       setShowEditor(false);
       setEditingArticle(null);
       await loadArticles(); // Recharger la liste
     } catch (error) {
-      console.error("Erreur sauvegarde:", error);
-      showMessage("Erreur lors de la sauvegarde", "error");
+      console.error("❌ Erreur sauvegarde:", error);
+      showMessage(error.message || "Erreur lors de la sauvegarde", "error");
     } finally {
       setLoading(false);
     }
   };
 
+  // 🔧 FONCTION DE SUPPRESSION mise à jour
   const handleDeleteArticle = async (article) => {
     if (!confirm(`Êtes-vous sûr de vouloir supprimer "${article.title}" ?`)) {
       return;
@@ -126,27 +309,69 @@ export default function CMSDashboard() {
 
     try {
       setLoading(true);
-      await githubAPI.deleteArticle(article.path);
-      showMessage("Article supprimé avec succès !");
-      await loadArticles();
+      console.log("🗑️ Suppression article:", article.title);
+
+      const response = await fetch(
+        `/api/cms/github/delete-article?slug=${encodeURIComponent(
+          article.slug
+        )}&title=${encodeURIComponent(article.title)}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Erreur lors de la suppression");
+      }
+
+      console.log("✅ Article supprimé:", result);
+      showMessage(result.message || "Article supprimé avec succès !");
+      await loadArticles(); // Recharger la liste
     } catch (error) {
-      console.error("Erreur suppression:", error);
-      showMessage("Erreur lors de la suppression", "error");
+      console.error("❌ Erreur suppression:", error);
+      showMessage(error.message || "Erreur lors de la suppression", "error");
     } finally {
       setLoading(false);
     }
   };
 
+  // 🔧 FONCTION DE PUBLICATION mise à jour
   const handlePublishArticle = async (article) => {
     try {
       setLoading(true);
-      const updatedArticle = { ...article, draft: false };
-      await githubAPI.saveArticle(updatedArticle, currentSiteConfig, true);
+      console.log("📢 Publication article:", article.title);
+
+      const updatedArticle = {
+        ...article,
+        draft: false,
+        publishedAt: new Date().toISOString(),
+      };
+
+      const response = await fetch("/api/cms/github/save-article", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedArticle),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Erreur lors de la publication");
+      }
+
+      console.log("✅ Article publié:", result);
       showMessage("Article publié avec succès !");
-      await loadArticles();
+      await loadArticles(); // Recharger la liste
     } catch (error) {
-      console.error("Erreur publication:", error);
-      showMessage("Erreur lors de la publication", "error");
+      console.error("❌ Erreur publication:", error);
+      showMessage(error.message || "Erreur lors de la publication", "error");
     } finally {
       setLoading(false);
     }
@@ -172,7 +397,7 @@ export default function CMSDashboard() {
                   setLoginData({ ...loginData, username: e.target.value })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="admin"
+                placeholder="Admin"
               />
             </div>
             <div>
@@ -186,7 +411,7 @@ export default function CMSDashboard() {
                   setLoginData({ ...loginData, password: e.target.value })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="admin123"
+                placeholder="password"
                 onKeyPress={(e) => e.key === "Enter" && handleLogin()}
               />
             </div>
