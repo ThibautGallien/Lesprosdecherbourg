@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter, Playfair_Display } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next"; // ✅ AJOUTER
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import GoogleAnalytics from "@/components/google-analytics";
@@ -101,6 +102,9 @@ export default function RootLayout({ children }) {
         <Header />
         <main>{children}</main>
         <Footer />
+
+        {/* ✅ Speed Insights - AJOUTER ICI */}
+        <SpeedInsights />
       </body>
     </html>
   );

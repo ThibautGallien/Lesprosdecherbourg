@@ -39,11 +39,28 @@ export async function POST(request) {
     const body = await request.json();
     console.log("📊 Body reçu:", body);
 
-    const { siteId, article } = body;
+    // 🔧 CORRECTION : Le CMS envoie directement l'article, pas { siteId, article }
+    const articleData = body; // L'article complet
 
+    // 🎯 Récupérer le siteId depuis les query params ou headers
+    const { searchParams } = new URL(request.url);
+    let siteId = searchParams.get("siteId");
+
+    // Si pas dans l'URL, essayer de le déduire de la catégorie ou utiliser default
     if (!siteId) {
-      return NextResponse.json({ error: "siteId requis" }, { status: 400 });
+      // Pour Dormesia, on peut détecter avec les catégories
+      if (
+        articleData.category === "science-sommeil" ||
+        articleData.category === "conseils-sommeil" ||
+        articleData.category === "produits-naturels"
+      ) {
+        siteId = "dormesia";
+      } else {
+        siteId = "les-pros-cherbourg"; // Default
+      }
     }
+
+    console.log(`🎯 Site détecté: ${siteId}`);
 
     // ✅ Redirection vers ton API existante
     const apiUrl = new URL("/api/cms/github", request.url);
@@ -61,7 +78,7 @@ export async function POST(request) {
           request.headers.get("authorization") ||
           `Bearer ${process.env.CMS_API_KEY || "demo-key"}`,
       },
-      body: JSON.stringify(article), // Juste l'article, pas { siteId, article }
+      body: JSON.stringify(articleData), // L'article complet
     });
 
     const result = await response.json();
