@@ -104,7 +104,7 @@ export const SITES_CONFIG = {
   "dormesia": {
     id: "dormesia",
     name: "Dormesia - Expert du Sommeil",
-    domain: "dormesia.vercel.app", // ✅ CORRIGÉ (.com → .vercel.app)
+    domain: "dormesia.com", // ✅ CORRIGÉ (.com → .vercel.app)
     repo: "ThibautGallien/Dormesia", // ✅ CORRIGÉ (dormesia → Dormesia)
     branch: "main",
     logo: "/logos/dormesia.png",
